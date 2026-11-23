@@ -1,199 +1,125 @@
+<div align="center">
+
 # Attendance Tracker — Python CLI Application
+### Automated Classroom Record Telemetry, Input Validation & File I/O Persistence
 
-A **Python-based command-line attendance tracker** that allows users to record student attendance, validate entries, generate formatted summaries, and optionally export attendance reports to a text file.
+[![Python](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![CLI](https://img.shields.io/badge/Interface-Interactive%20Terminal-4D4D4D.svg?style=for-the-badge&logo=gnubash&logoColor=white)](https://en.wikipedia.org/wiki/Command-line_interface)
+[![File I/O](https://img.shields.io/badge/Storage-Persistent%20Disk%20Export-blue.svg?style=for-the-badge)](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-This project demonstrates the use of **Python fundamentals such as input handling, file operations, loops, and data validation**, making it a practical example of building a simple but useful command-line application.
-
----
-
-#  Project Overview
-
-The **Attendance Tracker** is a lightweight CLI tool designed to help manage and track student attendance through the terminal.
-
-Users can:
-
-* Enter student names
-* Record attendance entries
-* Validate input data
-* Display formatted attendance summaries
-* Export attendance reports to a text file
-
-The project emphasizes **clean program structure, error handling, and file management**, making it useful for learning core Python programming concepts.
+<p align="center">
+  <b>A lightweight, zero-dependency Python command-line utility for institutional attendance tracking and reporting.</b><br>
+  Built with sanitizing input validation loops, in-memory roster aggregation, formatted terminal matrices, and persistent text log exports.
+</p>
 
 ---
 
-#  Problem Statement
+</div>
 
-Manual attendance tracking can often be time-consuming and error-prone, especially when managing multiple entries.
+## Executive Summary
 
-This project provides a simple automated solution that:
+Manual attendance recording in academic and corporate settings is prone to clerical errors, misplaced paper logs, and tedious manual reconciliation.
 
-* Records attendance entries efficiently
-* Prevents invalid input
-* Generates clear attendance summaries
-* Stores attendance logs for future reference
+**Attendance Tracker** is a streamlined terminal-based productivity utility that automates student roll-call workflows. The script enforces defensive validation on candidate name strings (rejecting whitespace-only and malformed entries), compiles session attendance records in-memory, dynamically renders tabular verification summaries, and serializes final attendance manifests directly to structured disk files (`attendance_log.txt`) for archival integrity.
 
 ---
 
-#  Solution Approach
-
-The application is built using **Python and runs in the command-line interface (CLI)**.
-
-The program workflow involves:
-
-1. Accepting student names as input
-2. Validating user entries
-3. Storing attendance data in memory
-4. Displaying formatted attendance summaries
-5. Optionally exporting the attendance record to a text file
-
-The project highlights practical usage of **Python data structures and file handling techniques**.
-
----
-
-#  Key Features
-
-###  Attendance Recording
-
-Allows users to input and record multiple student attendance entries.
-
-###  Input Validation
-
-Ensures that incorrect or empty inputs are handled properly.
-
-###  Formatted Attendance Summary
-
-Displays attendance data in a structured and readable format.
-
-###  File Export Support
-
-Attendance reports can be saved to a **text file for record keeping**.
-
-### Command-Line Interface
-
-Runs entirely in the terminal, making it lightweight and easy to execute.
-
----
-
-#  Tech Stack
-
-| Technology                       | Purpose                   |
-| -------------------------------- | ------------------------- |
-| **Python 3**                     | Core programming language |
-| **CLI (Command Line Interface)** | User interaction          |
-| **File Handling (Python)**       | Saving attendance logs    |
-
----
-
-#  Program Workflow
+## Architectural Workflow & State Validation
 
 ```
-User Input (Student Name)
-        │
-        ▼
-Input Validation
-        │
-        ▼
-Attendance Recording
-        │
-        ▼
-Display Summary
-        │
-        ▼
-Optional File Export
-        │
-        ▼
-attendance_log.txt Generated
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              TERMINAL ATTENDANCE SESSION                               │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │  Input Collection Loop  │
+                       │  (Student Name Prompt)  │
+                       └─────────────────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │ Input Sanitizer Guard   │ ◄── Rejects Empty / Whitespace Entries
+                       └─────────────────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │ In-Memory Roster Map    │ ──► Tracks Present/Absent Status
+                       └─────────────────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │ Session Summary HUD     │ ──► Formatted Terminal Matrix
+                       └─────────────────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │ File Persistence Engine │ ──► Appends to `attendance_log.txt`
+                       └─────────────────────────┘
 ```
 
 ---
 
-#  Project Structure
+## Core Technical Features
 
+| Feature Module | Technical Implementation | Operational Benefit |
+|:---|:---|:---|
+| **Defensive Validation** | String normalization and non-empty checks rejecting empty/whitespace inputs. | Prevents silent roster corruption from accidental return key presses. |
+| **In-Memory Tracking** | Structured Python dictionaries maintaining student identifier keys and attendance flags. | Fast, constant-time $O(1)$ lookups and status mutations during live sessions. |
+| **Tabular Summary Matrix** | Dynamic string formatting with column alignment and border separators. | Provides immediate visual verification for educators before session termination. |
+| **Persistent File Log** | Safe file context managers (`with open(...) as f:`) writing records to disk. | Guarantees file handle finalization and persistent audit logs. |
+| **Zero External Deps** | Pure Python standard library implementation with zero third-party requirements. | Runs out-of-the-box on any standard Python 3.x installation. |
+
+---
+
+## Quickstart & Local Execution
+
+```bash
+# Clone the repository
+git clone https://github.com/vsbeginner/AttendanceTracker.git
+cd AttendanceTracker
+
+# Execute using Python 3
+python tracker.py
 ```
-attendance-tracker
-│
-├── tracker.py             # Main program file
-├── sample_run_1.txt       # Example program execution
-├── sample_run_2.txt       # Example program execution
-├── sample_run_3.txt       # Example program execution
-├── attendance_log.txt     # Generated attendance report
-└── README.md              # Project documentation
+
+### Example Terminal Session:
+```text
+====================================================
+           ATTENDANCE TRACKER CLI
+====================================================
+Enter student name (or type 'done' to finalize): Rahul Sharma
+[STATUS: Present] Recorded: Rahul Sharma
+
+Enter student name (or type 'done' to finalize): Priya Singh
+[STATUS: Present] Recorded: Priya Singh
+
+Enter student name (or type 'done' to finalize): done
+
+====================================================
+             FINAL ATTENDANCE SUMMARY
+====================================================
+Total Students Present : 2
+Report Export Target   : attendance_log.txt
+Status                 : Successfully Serialized to Disk
+====================================================
 ```
 
 ---
 
-#  Example Usage
+## Candidate Profile & Institutional Details
 
-Example CLI interaction:
-
-```
-Enter student name: Rahul
-Enter student name: Priya
-Enter student name: Aman
-
-Attendance Summary
-------------------
-Rahul  : Present
-Priya  : Present
-Aman   : Present
-
-Attendance saved to attendance_log.txt
-```
+- **Candidate Name**: Vinayak Sharma
+- **Enrollment / Roll No**: 2501940012
+- **GitHub Profile**: [@vsbeginner](https://github.com/vsbeginner)
+- **LinkedIn Profile**: [Vinayak Sharma](https://www.linkedin.com/in/vinayak-sharma-24a8aa384/)
+- **Email Contact**: vsbeginner14@gmail.com
+- **Degree Program**: Master of Computer Applications (MCA)
+- **Institution**: Department of Computer Science & Engineering, K.R. Mangalam University
 
 ---
 
-#  Example Output Files
-
-The repository includes sample program executions:
-
-```
-sample_run_1.txt
-sample_run_2.txt
-sample_run_3.txt
-```
-
-These files demonstrate how the program behaves during different attendance recording scenarios.
-
----
-
-#  Challenges & Learnings
-
-### Input Validation
-
-Handling incorrect or empty user input was important to ensure program reliability.
-
-### File Handling
-
-Implementing file writing functionality helped demonstrate practical use of Python's file system operations.
-
-### CLI Interaction Design
-
-Designing a clear and easy-to-use command-line interaction improved usability.
-
----
-
-#  Future Improvements
-
-Potential enhancements for this project include:
-
-* Add **date-based attendance tracking**
-* Implement **CSV or Excel export support**
-* Create a **graphical user interface (GUI) version**
-* Add **student ID support**
-* Integrate **database storage**
-
----
-
-#  Author
-
-**Vinayak Sharma**
-
-GitHub
-https://github.com/vsbeginner
-
-LinkedIn
-https://www.linkedin.com/in/vinayak-sharma-24a8aa384/
-
----
-
+<div align="center">
+  <sub>Developed for academic excellence and technical portfolio showcase. Licensed under the <a href="LICENSE">MIT License</a>.</sub>
+</div>
